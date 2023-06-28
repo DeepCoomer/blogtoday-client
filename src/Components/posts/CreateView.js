@@ -74,6 +74,20 @@ const CreateView = (props) => {
         }
     }
 
+     const registerDataChange = (e) => {
+        if (e.target.name === "file") {
+            const reader = new FileReader();
+
+            reader.onload = () => {
+                if (reader.readyState === 2) {
+                    setFile(reader.result);
+                }
+            };
+
+            reader.readAsDataURL(e.target.files[0]);
+        }
+    }
+
     useEffect(() => {
         getImage()
         // eslint-disable-next-line
@@ -99,14 +113,14 @@ const CreateView = (props) => {
                 <img className={classes.image} src={url} alt="" />
                 <FormControl className={classes.form}>
                     <label htmlFor="fileInput">
-                        <AddCircle style={{ cursor: 'pointer' }} className={classes.addIcon} fontSize="large" color="action" onClick={() => alert("The hosted version doesn't support uploading images please use the localhost version for the same.")} />
+                        <AddCircle style={{ cursor: 'pointer' }} className={classes.addIcon} fontSize="large" color="action" />
                     </label>
                     <input
                         type="file"
                         id="fileInput"
                         style={{ display: "none" }}
-                        onChange={(e) => setFile(e.target.files[0])}
-                        disabled={true}
+                        name='file'
+                        onChange={registerDataChange}
                     />
                     <InputBase onChange={(e) => handleChange(e)} placeholder="Title" className={classes.textField} value={post.title} name='title' />
                     <Button variant='contained' color='primary' onClick={() => savePost(post)}>Publish</Button>
